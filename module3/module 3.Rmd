@@ -1,0 +1,132 @@
+---
+title: "module 3"
+runtime: shiny
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup environment, include=FALSE}
+library(rsconnect)
+library(shiny)
+library(plotly)
+library(ggplot2)
+library(shinythemes)
+library(dplyr)
+library(readr)
+```
+
+
+``` {r load data}
+#load data
+data <- read.csv("https://raw.githubusercontent.com/miasiracusa/CUNY_DATA_608/master/module3/data/cleaned-cdc-mortality-1999-2010-2.csv", header = TRUE)
+```
+I will first take a look at the columns and how the data is set up.
+```{r explore data}
+summary(data)
+```
+
+For Question 1, I am asked to create a visualization that allows one to rank States by crude mortality for each cause of death for 2010.
+
+```{r Q1, echo=FALSE}
+q1data <- filter(data, data$Year == 2010)
+
+# Define UI
+ui <- fluidPage(theme = shinytheme("lumen"),
+  titlePanel("Disease Rates in America"),
+  sidebarLayout(
+    sidebarPanel(
+
+      # Select type of trend to plot
+      selectInput(inputId = "ICD.Chapter", label = strong("Disease"),
+                  choices = unique(q1data$ICD.Chapter),
+                  selected = "Certain infectious and parasitic diseases")
+    ),
+
+    # Output: Description, lineplot, and reference
+    mainPanel(
+      plotOutput(outputId = "barplot", height = "300px"),
+      textOutput(outputId = "desc")
+    )
+  )
+)
+
+# Define server function
+server <- function(input, output) {
+
+  # Subset data
+  selected_disease <- reactive({
+    req(input$ICD.Chapter)
+    q1data %>%
+      filter(
+        ICD.Chapter == input$ICD.Chapter
+        )
+  })
+
+
+  # Create barplot object the plotOutput function is expecting
+    
+   output$barplot <- renderPlot({
+    barplot(selected_disease()$Crude.Rate, names.arg = selected_disease()$State, main="Instances of Disease", xlab="State", ylab = "Rate")
+    }
+  )
+}
+
+# Create Shiny object
+shinyApp(ui = ui, server = server)
+
+```
+ For question 2, I will create a shiny app that filters the data by disease and state.
+```{r q2}
+q2data <- data
+
+# Define UI
+ui2 <- fluidPage(theme = shinytheme("lumen"),
+  titlePanel("Diseases by State"),
+  sidebarLayout(
+    sidebarPanel(
+
+      # Select state and diease to plot
+      selectInput(inputId = "ICD.Chapter", label = strong("Disease"),
+                  choices = unique(q2data$ICD.Chapter),
+                  selected = "Certain infectious and parasitic diseases"),
+      selectInput(inputId = "State", label = strong("State"),
+                  choices = unique(q2data$State),
+                  selected = "AL")
+    ),
+
+    # Output: Description, lineplot, and reference
+    mainPanel(
+      plotOutput(outputId = "lineplot", height = "300px"),
+      textOutput(outputId = "desc")
+    )
+  )
+)
+
+# Define server function
+server2 <- function(input, output) {
+
+  # Subset data
+  selected_disease_state <- reactive({
+    req(input$ICD.Chapter)
+    req(input$State)
+    q2data %>%
+      filter(ICD.Chapter == input$ICD.Chapter & State == input$State)
+  })
+
+
+  # Create lineplot object the plotOutput function is expecting
+   output$lineplot <- renderPlot({
+     color = "#434343"
+    par(mar = c(4, 4, 1, 1))
+    plot(x = selected_disease_state()$Year, y = selected_disease_state()$Crude.Rate, main="Instances of Disease", xlab="Year", ylab = "Rate")
+    }
+  )
+}
+
+# Create Shiny object
+shinyApp(ui = ui2, server = server2)
+
+```
