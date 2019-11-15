@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1671.2">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Courier; color: #11101c; -webkit-text-stroke: #11101c}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Courier; color: #11101c; -webkit-text-stroke: #11101c; min-height: 12.0px}
+    span.s1 {font-kerning: none}
+    span.Apple-tab-span {white-space:pre}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;h2&gt;Problem 1&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1">&lt;h3&gt;Funtion 1&lt;/h3&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;button onclick="myFunction1()"&gt;Try it&lt;/button&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;p id="funtion1"&gt;&lt;/p&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;script&gt;</span></p>
+<p class="p1"><span class="s1">function myFunction1() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>var txt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>var person = prompt("Please enter a word:", "Hello");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (person == null || person == "") {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>txt = "User cancelled the prompt.";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>txt = person.split("").reverse().join("");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>document.getElementById("funtion1").innerHTML = txt;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;h3&gt;Funtion 2&lt;/h3&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;script type="text/javascript"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>function printTable(){</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>var num;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>num=Number(document.getElementById('txtNumber').value);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>var pTag= document.getElementById('pPrint');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>pTag.innerHTML += "&lt;table&gt;&lt;tr&gt;&lt;td&gt;" + num*1 + "&lt;/td&gt;&lt;td&gt;" + num*2 + "&lt;/td&gt;&lt;td&gt;" + num*3 + "&lt;/td&gt;&lt;td&gt;" + num*4 + "&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;" + num*5 + "&lt;/td&gt;&lt;td&gt;" + num*6 + "&lt;/td&gt;&lt;td&gt;" + num*7 + "&lt;/td&gt;&lt;td&gt;" + num*8 + "&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;" + num*9 + "&lt;/td&gt;&lt;td&gt;" + num*10 + "&lt;/td&gt;&lt;td&gt;" + num*11 + "&lt;/td&gt;&lt;td&gt;" + num*12 + "&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;" + num*13 + "&lt;/td&gt;&lt;td&gt;" + num*14 + "&lt;/td&gt;&lt;td&gt;" + num*15 + "&lt;/td&gt;&lt;td&gt;" + num*16 + "&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;" + num*17 + "&lt;/td&gt;&lt;td&gt;" + num*18 + "&lt;/td&gt;&lt;td&gt;" + num*19 + "&lt;/td&gt;&lt;td&gt;" + num*20 + "&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" + "&lt;br/&gt;"<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&lt;p&gt;&lt;input type="text" id="txtNumber" placeholder="Enter number"/&gt;&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&lt;p&gt;&lt;input type="button" value="Print Table" onclick='printTable()'/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&lt;!--print numbers--&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&lt;p id="pPrint"&gt;&lt;/p&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
