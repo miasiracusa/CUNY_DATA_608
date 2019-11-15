@@ -8,43 +8,29 @@
         <script src="http://d3js.org/d3.v3.min.js"></script>
 
         <script type="text/javascript"charset="utf-8">
-        d3.csv("presidents.csv", function(data) {
-// the columns you'd like to display
-var columns = ["name", "age"];
-
-var table = d3.select("#container").append("table"),
-    thead = table.append("thead"),
-    tbody = table.append("tbody");
-
-// append the header row
-thead.append("tr")
-    .selectAll("th")
-    .data(columns)
-    .enter()
-    .append("th")
-        .text(function(column) { return column; });
-
-// create a row for each object in the data
-var rows = tbody.selectAll("tr")
-    .data(data)
-    .enter()
-    .append("tr");
-
-// create a cell in each row for each column
-var cells = rows.selectAll("td")
-    .data(function(row) {
-        return columns.map(function(column) {
-            return {column: column, value: row[column]};
-        });
-    })
-    .enter()
-    .append("td")
-        .text(function(d) { return d.value; });
-});
-        </script>
-
-
-
+        d3
+        .select('body')
+        .selectAll()
+        .data("<table><tr><td>" + "Name,Height,Weight" + "</td></tr><tr><td>" + "Washington,74,175" + "</td></tr><tr><td>" + "J. Adams,67,165" + "</td></tr><tr><td>" +"Madison,64,100" + "</td></tr><tr><td>" +"Jackson,73,140" + "</td></tr><tr><td>" +"Taylor,68,170" + "</td></tr><tr><td>" +"Lincoln,76,180" + "</td></tr><tr><td>" +"Hayes,68,170" + "</td></tr><tr><td>" +"Cleveland,61,260" + "</td></tr><tr><td>" +"Taft,72,316" + "</td></tr><tr><td>" +"Wilson,61,170" + "</td></tr><tr><td>" +"Hoover,61,187" + "</td></tr><tr><td>" +"F.D. Roosevelt,74,188" + "</td></tr><tr><td>" +"Truman,69,167" + "</td></tr><tr><td>" +"Eisenhower,61,171" + "</td></tr><tr><td>" +"Kennedy,72,173" + "</td></tr><tr><td>" +"Johnson,75,200" + "</td></tr><tr><td>" +"Nixon,61,175" + "</td></tr><tr><td>" +"Ford,72,195" + "</td></tr><tr><td>" +"Carter,69,160" + "</td></tr><tr><td>" +"Reagan,73,185" + "</td></tr><tr><td>" +"Bush,74,191" + "</td></tr><tr><td>" +"Clinton,74,216" + "</td></tr><tr><td>" +"GW Bush,72,196" + "</td></tr></table>" + "<br/>")
+        .enter()
+        .append(td)
+        .text(function(d) {
+          return d;
+          document.data.innerHTML
+  });
+    </script>
+    <script type="text/javascript">
+  			function printPres(){
+  				var pres;
+  				pres=document.getElementById('txtP').value;
+  				var pTag= document.getElementById('pPrint');
+  					pTag.innerHTML += "<table><tr><td>" + "Name,Height,Weight" + "</td></tr><tr><td>" + data.contains(pres) "</td></tr></table>" + "<br/>"
+  			}
+  		</script>
+  		<p><input type="text" id="txtP" placeholder="Enter President"/></p>
+  		<p><input type="button" value="Print Results" onclick='printTable()'/>
+  		<!--print numbers-->
+  		<p id="pPrint"></p>
 
     </body>
 </html>
