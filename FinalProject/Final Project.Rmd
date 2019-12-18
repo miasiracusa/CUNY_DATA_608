@@ -1,6 +1,7 @@
 ---
-title: "Final Project"
+title: "Final Project Data 608"
 output: html_document
+runtime: shiny
 ---
 
 ```{r setup environment, include=FALSE}
@@ -11,6 +12,10 @@ library(ggplot2)
 library(shinythemes)
 library(dplyr)
 library(readr)
+library(reticulate)
+library(rPython)
+library(leaflet)
+library(wesanderson)
 ```
 
 
@@ -21,47 +26,47 @@ head(calls)
 ```
 
 Below is an interactive graph where the user can compare the complaint types throughout specific boroughs.
+
 ```{r filter by complaint type}
-complaint <- calls
+graph1 <- calls[,c("complaint_type", "borough")]
 
-# Define UI
+ # Define UI
 ui2 <- fluidPage(theme = shinytheme("lumen"),
-  titlePanel("Complaints by borough"),
-  sidebarLayout(
-    sidebarPanel(
-
-      # Select borough to plot
-      selectInput(inputId = "complaint_type", label = strong("borough"),
-                  choices = unique(complaint$complaint_type),
-                  selected = "MANHATTAN")
-    ),
-
-    # Output: Description, lineplot, and reference
-    mainPanel(
-      plotOutput(outputId = "barplot", height = "300px"),
-      textOutput(outputId = "desc")
-    )
-  )
-)
-
-# Define server function
+   titlePanel("Complaints by borough"),
+   sidebarLayout(
+     sidebarPanel(
+ 
+       # Select complaint to plot
+       selectInput(inputId = "complaint_type", label = strong("complaint_type"),
+                   choices = unique(graph1$complaint_type),
+                   selected = "Street Condition")
+     ),
+ 
+     # Output: Description, lineplot, and reference
+     mainPanel(
+       plotOutput(outputId = "barplot", height = "300px"),
+       textOutput(outputId = "desc")
+     )
+   )
+ )
+ 
+ # Define server function
 server2 <- function(input, output) {
+ #change reactive to selected dataset!!!! error can't find onject "complaint"
+   # Subset data
+   selected_complaint <- reactive({
+     req(input$complaint_type)
+     complaint %>%
+       filter(
+         complaint_type == input$complaint_type
+         )
+   })
 
-  # Subset data
-  complaint_comtype <- reactive({
-    req(input$complaint_type)
-    complaint %>%
-      filter(complaint_type == input$complaint_type)
-  })
-
-
-  # Create barplot object the plotOutput function is expecting
-   output$barplot <- renderPlot({
-     color = "#434343"
-    par(mar = c(4, 4, 1, 1))
-    plot(table(complaint_comtype()$borough), main="Instances of complaint", xlab="borough", ylab = "Rate")
-    }
-  )
+   # Create barplot object the plotOutput function is expecting
+    output$barplot <- renderPlot({
+     barplot(selected_complaint()$borough, names.arg = selected_complaint()$complaint_type, main="Instances of Disease", main="Instances of complaint", xlab="borough", ylab = "Rate")
+     }
+   )
 }
 
 # Create Shiny object
@@ -69,48 +74,50 @@ shinyApp(ui = ui2, server = server2)
 
 ```
 Below is an interactive graph to compare how one specific complaint type affects different boroughs.
-```{r filter by complaint type}
-borough <- calls
+```{r filter by complaint type vs borough}
+ borough <- calls
+ complaint_borough <- borough
+ head(complaint_borough)
+ # Define UI
+ ui3 <- fluidPage(theme = shinytheme("lumen"),
+   titlePanel("Complaints by borough"),
+   sidebarLayout(
+     sidebarPanel(
 
-# Define UI
-ui3 <- fluidPage(theme = shinytheme("lumen"),
-  titlePanel("Complaints by borough"),
-  sidebarLayout(
-    sidebarPanel(
+       # Select borough to plot
+       selectInput(inputId = "borough", label = strong("borough"),
+                   choices = unique(borough$borough),
+                   selected = "MANHATTAN")
+     ),
 
-      # Select borough to plot
-      selectInput(inputId = "borough", label = strong("borough"),
-                  choices = unique(borough$borough),
-                  selected = "MANHATTAN")
-    ),
+     # Output: Description, lineplot, and reference
+     mainPanel(
+       plotOutput(outputId = "barplot", height = "300px"),
+       textOutput(outputId = "desc")
+     )
+   )
+ )
 
-    # Output: Description, lineplot, and reference
-    mainPanel(
-      plotOutput(outputId = "barplot", height = "300px"),
-      textOutput(outputId = "desc")
-    )
-  )
-)
+ # Define server function
+ server3 <- function(input, output) {
 
-# Define server function
-server3 <- function(input, output) {
 
   # Subset data
-  complaint_borough <- reactive({
-    req(input$borough)
-    complaint %>%
-      filter(borough == input$borough)
-  })
+   complaint_borough() <- reactive({
+     req(input$borough)
+     complaint_borough %>%
+       filter(borough == input$borough)
+   })
 
 
-  # Create barplot object the plotOutput function is expecting
-   output$barplot <- renderPlot({
-     color = "#434343"
-    par(mar = c(4, 4, 1, 1))
-    plot(table(complaint_borough()$complaint_type), main="Instances of complaint", xlab="complaint type", ylab = "Rate")
-    }
-  )
-}
+   # Create barplot object the plotOutput function is expecting
+  output$barplot <- renderPlot({
+    color = "#434343"
+     par(mar = c(4, 4, 1, 1))
+     plot(table(complaint_borough()$complaint_type), main="Instances of complaint", xlab="complaint type", ylab = "Rate")
+     }
+   )
+ }
 
 # Create Shiny object
 shinyApp(ui = ui3, server = server3)
@@ -119,14 +126,77 @@ shinyApp(ui = ui3, server = server3)
 
 I will also be creating an interactive map which will show complaint status by borough. This will hopefully be useful to different agencies to see where they have the most issues, and if those issues are reseolved or not. They will also be able to compare issues by area over time with a interactive line plot. This will hopefully shed light on if there are recurring issues in certain areas over time.
 
-
-
-```{python}
-#interactive map here
+```{r map data set up}
+complaint_types <- calls[,c(6,39:40)]
+complaint_types <- na.omit(complaint_types)
+categories <- unique(complaint_types$complaint_type)
+categories2 <- c()
+for (i in 1:length(categories)) {
+        categories2[i] <- toString(categories[i])}
 ```
 
-```{r}
-#interactive lineplot here
+Below is the map with all complaints.
+```{r map}
+# show map with complaints
+cl <- colors()[1:63]
+
+pal <- colorFactor(cl, domain = categories2)
+
+leaflet(complaint_types) %>% addTiles() %>%
+  addCircleMarkers(lng = ~longitude, lat = ~latitude, radius = 4, color = ~pal(complaint_type), stroke = FALSE, fillOpacity = 0.5)
 ```
 
-I would also like to compare most and least common complaints throughout NYC. From there it would be interesting to see if there is any statistical significance between boroughs for the most complaints.
+Below is the interactive map.
+```{r map shiny app}
+
+# Define UI
+ui4 <- fluidPage(theme = shinytheme("lumen"),
+  titlePanel("Complaints by type"),
+  sidebarLayout(
+    sidebarPanel(
+
+      # Select borough to plot
+      selectInput(inputId = "complaint_type", label = strong("complaint_type"),
+                  choices = unique(complaint_types$complaint_type),
+                  selected = "Street Condition")
+    ),
+
+    # Output: Description, lineplot, and reference
+    mainPanel(
+      leafletOutput(outputId = "mymap")
+    )
+  )
+)
+
+# Define server function
+server4 <- function(input, output) {
+
+  # Subset data
+  complaint_type_graph() <- reactive({
+    req(input$complaint_type)
+    complaint %>%
+      filter(complaint_type == input$complaint_type)
+  })
+  
+
+  # Create barplot object the plotOutput function is expecting
+   output$mymap <- renderLeafLet({
+     addCircleMarkers(lng = ~longitude, lat = ~latitude, radius = 4, color = ~pal(complaint_type), stroke = FALSE, fillOpacity = 0.5)
+    }
+  )
+}
+
+# Create Shiny object
+shinyApp(ui = ui4, server = server4)
+
+```
+
+
+
+```{r deploy}
+
+rsconnect::setAccountInfo(name='miasiracusa1',
+			  token='A8DBE469F01447978C77E685D6AE43BE',
+			  secret='KzPqGJEk4erc5aHrfRiyS3nrFyRzaIS0m3TR+jt1')
+
+```

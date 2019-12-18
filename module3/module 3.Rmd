@@ -130,3 +130,5 @@ server2 <- function(input, output) {
 shinyApp(ui = ui2, server = server2)
 
 ```
+
+
