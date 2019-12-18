@@ -16,9 +16,6 @@ library(reticulate)
 library(rPython)
 library(leaflet)
 library(wesanderson)
-require(shiny)
-require(shinydashboard)
-require(leaflet)
 ```
 
 ```{r deploy, echo=FALSE}
